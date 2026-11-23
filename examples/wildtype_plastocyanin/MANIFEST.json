@@ -1,0 +1,73 @@
+{
+  "example": "Real-system wildtype plastocyanin WOOPS usage walkthrough",
+  "type": "Real Fortran output demonstration, separate from independent validation",
+  "input_source": "User-supplied 1YLB_Small_waters.psf and last_100ps.dcd",
+  "sampling": {
+    "source_frames": 500,
+    "source_dt_ps": 0.2,
+    "retained_zero_based_indices": [
+      0,
+      50,
+      100,
+      150,
+      200,
+      250,
+      300,
+      350,
+      400,
+      450
+    ],
+    "sample_frames": 10,
+    "sample_dt_ps": 10.0,
+    "span_between_first_last_ps": 90.0
+  },
+  "system": {
+    "total_atoms": 34709,
+    "solute_atoms_beta1": 1436,
+    "water_molecules": 11091,
+    "water_model": "TIP3P"
+  },
+  "outputs": "Copied directly from completed WOOPS Fortran nanodomain and Kirkwood runs on the 10-frame real-system fixture",
+  "files": {
+    "input/wildtype.dcd": {
+      "bytes": 4166236,
+      "sha256": "ef867a66ec3efb59f1e7881d137333d9ebfbd7af55dd61fa90cb4d52d1348efb"
+    },
+    "input/wildtype.pdb": {
+      "bytes": 2742057,
+      "sha256": "6fd03af728f50fac5e5bac2a47ca244569dcf910fe0f1fff5e86818c273170f1"
+    },
+    "input/wildtype.psf": {
+      "bytes": 3604539,
+      "sha256": "085c7bb532eb59e9b8f876e9596de8e957326d561d63806a2a0e3fa843061399"
+    },
+    "sample_output/kirkwood/kirkwood_PRO16_10A.dat": {
+      "bytes": 1488,
+      "sha256": "cc5717181f023256530c4a44e0e925248c82ef09b98e76ab022643b57c9575ea"
+    },
+    "sample_output/kirkwood/kirkwood_PRO16_10A_summary.dat": {
+      "bytes": 950,
+      "sha256": "708610d7aeb532d59cd52417ee9488507d06fd61b2e7bcfdafc0ae30c9187f81"
+    },
+    "sample_output/kirkwood/kirkwood_PRO16_7A.dat": {
+      "bytes": 1484,
+      "sha256": "30c45be19be029bc0b1fe7c90d88d0c0b65618b0dbbdce507ef487813d699367"
+    },
+    "sample_output/kirkwood/kirkwood_PRO16_7A_summary.dat": {
+      "bytes": 949,
+      "sha256": "acfd0066e1f626f2c921fb5e5f2346d72401395216fdac6138d1c0de11b0bcb9"
+    },
+    "sample_output/kirkwood/kirkwood_interface.dat": {
+      "bytes": 1511,
+      "sha256": "a732ec3d1a78d37537442cf514ef05f8de5b6ce23b926fea0ced54f88b1ab7fd"
+    },
+    "sample_output/kirkwood/kirkwood_interface_summary.dat": {
+      "bytes": 953,
+      "sha256": "d8ac395f394036a2681faf860edb0da5ac0525fcbe06bc9e38a2ff363657a65d"
+    },
+    "sample_output/nanodomain/p1p2.dat": {
+      "bytes": 176628,
+      "sha256": "c7080bbb317e52ef6d8b076008131bfc89199086203d12a8c8c9ada6a8cd8212"
+    }
+  }
+}
