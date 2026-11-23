@@ -1,1 +1,0 @@
-Run WOOPS from this directory: `../../../../src/nanodomain/map.e < WOOPS_input`. The `WOOPS_input` paths are relative to this directory. Results appear here as `p1p2.dat`. Compare to `../../sample_output/nanodomain/p1p2.dat`.
