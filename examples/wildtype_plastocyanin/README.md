@@ -193,12 +193,12 @@ DATA DI :  n_frames  atom_id  residue_id  atom_name  residue_name  q  P1  P2  P2
 
 In this row, atom 1 (`N`, VAL1, partial charge −0.3 e) has 10-frame mean `P1=0.6482569071`, `P2=0.3115786082`, and `P21=−0.0840197038`. These are dimensionless. For each selected water, the local normal `n` points from its nearest solute heavy atom toward the water oxygen, and `u` is the unit water dipole. Then
 
-\[
+$$
 P_1 = \mathbf{u}\cdot\mathbf{n},\qquad
 P_2 = \frac{3(\mathbf{u}\cdot\mathbf{n})^2-1}{2}.
-\]
+$$
 
-The third parameter, \(P_{21}\), also characterizes orientation of the water molecular plane (see `src/nanodomain/README.md` for the exact angular convention).
+The third parameter, $P_{21}$, also characterizes orientation of the water molecular plane (see `src/nanodomain/README.md` for the exact angular convention).
 
 **How the averaging works:** in every frame, selected waters are assigned to the *nearest protein heavy atom*; their order parameters are averaged **within that frame** for that heavy atom. Each frame then contributes exactly once to the trajectory average. Bonded solute hydrogens inherit their parent heavy atom's values. A heavy atom without any assigned waters in a frame contributes **zero** in that frame, rather than being removed from the denominator. Thus a zero in `p1p2.dat` is **not** automatically evidence of isotropic water; it may indicate no assigned hydration waters across the sample. For this short example, many atoms have zeros.
 
@@ -212,13 +212,13 @@ Averages over these ten sampled frames are illustrative only: they are not a wel
 - `kirkwood_PRO16_7A.dat` and `kirkwood_PRO16_7A_summary.dat`: oxygen within 7 Å of the PRO16 backbone carbonyl oxygen.
 - `kirkwood_PRO16_10A.dat` and `kirkwood_PRO16_10A_summary.dat`: oxygen within 10 Å of that same oxygen.
 
-The PRO16 regions use the carbonyl O for **membership selection only**; the `n_i` vector for each water still points from its nearest protein heavy atom toward its oxygen. For a selected water with unit dipole \(\mathbf u_i\), define \(p_i=\mathbf u_i\cdot\mathbf n_i\) and \(\mathbf u_{i,\parallel}=\mathbf u_i-p_i\mathbf n_i\). The production code uses the *instantaneous occupancy* \(N(t)\) and evaluates
+The PRO16 regions use the carbonyl O for **membership selection only**; the `n_i` vector for each water still points from its nearest protein heavy atom toward its oxygen. For a selected water with unit dipole $\mathbf u_i$, define $p_i=\mathbf u_i\cdot\mathbf n_i$ and $\mathbf u_{i,\parallel}=\mathbf u_i-p_i\mathbf n_i$. The production code uses the *instantaneous occupancy* $N(t)$ and evaluates
 
-\[
+$$
  g_K(t)=\frac{|\sum_i\mathbf u_i|^2}{N(t)},\qquad
  g_\perp(t)=\frac{(\sum_i p_i)^2}{N(t)},\qquad
  g_\parallel(t)=\frac{|\sum_i\mathbf u_{i,\parallel}|^2}{N(t)}.
-\]
+$$
 
 The `.dat` time-series files are **CSV**, even though their extension is `.dat`. Each has this header:
 
@@ -232,7 +232,7 @@ frame,valid,N,normal_coherence,g_k,g_perp,g_parallel,decomposition_residual
 
 The `_summary.dat` files contain comment lines describing their 15 columns, followed by one numeric row. This is what WOOPS actually produced for these ten snapshots:
 
-| Region | Mean occupancy \(\langle N\rangle\) | \(\langle g_K\rangle\) | \(\langle g_\perp\rangle\) | \(\langle g_\parallel\rangle\) | Mean residual |
+| Region | Mean occupancy $\langle N\rangle$ | $\langle g_K\rangle$ | $\langle g_\perp\rangle$ | $\langle g_\parallel\rangle$ | Mean residual |
 |---|---:|---:|---:|---:|---:|
 | Full interface, 7 Å | 1108.80 | 1.717240 | 11.771607 | 1.220843 | −11.275210 |
 | PRO16, 7 Å | 9.70 | 1.537279 | 0.604536 | 0.914062 | +0.018681 |

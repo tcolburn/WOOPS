@@ -2,7 +2,7 @@
 
 This directory is a **drop-in numerical validation suite** for the two maintained WOOPS extensions:
 
-- `src/nanodomain/`: atom-resolved hydration orientation maps, \(P_1\), \(P_2\), and \(P_{21}\).
+- `src/nanodomain/`: atom-resolved hydration orientation maps, $P_1$, $P_2$, and $P_{21}$.
 - `src/kirkwood/`: three frame-resolved collective hydration-water dipole observables and their run summaries.
 
 All input coordinates come from the **actual wildtype plastocyanin (1YLB) simulation**. The example retains the **entire solute, copper, and solvent**; only the **number of DCD frames** has been reduced for a portable regression test. No simulated/artificial test geometry is involved.
@@ -205,58 +205,58 @@ restart
 
 ## 5. Reference physics and independent calculation
 
-For each water molecule \(i\), let \(\mathbf r_{Oi}\) be the oxygen position, \(\mathbf r_{H1i}\) and \(\mathbf r_{H2i}\) the hydrogen positions, and \(\mathbf r_{ai}\) the position of its nearest *solute heavy atom* under orthorhombic minimum-image boundary conditions.
+For each water molecule $i$, let $\mathbf r_{Oi}$ be the oxygen position, $\mathbf r_{H1i}$ and $\mathbf r_{H2i}$ the hydrogen positions, and $\mathbf r_{ai}$ the position of its nearest *solute heavy atom* under orthorhombic minimum-image boundary conditions.
 
 The **unit water dipole** for a neutral three-site positive-hydrogen-charge model is
 
-\[
+$$
 \mathbf u_i = \frac{\mathbf d_{H1,i}+\mathbf d_{H2,i}}
 {|\mathbf d_{H1,i}+\mathbf d_{H2,i}|}, \qquad
 \mathbf d_{Hk,i}=\operatorname{MIC}(\mathbf r_{Hki}-\mathbf r_{Oi}).
-\]
+$$
 
 The local outward normal is
 
-\[
+$$
 \mathbf n_i = \frac{\operatorname{MIC}(\mathbf r_{Oi}-\mathbf r_{ai})}
 {|\operatorname{MIC}(\mathbf r_{Oi}-\mathbf r_{ai})|}.
-\]
+$$
 
 For this validation, water-selection membership is based on **distance to any beta=1 solute atom, including hydrogens**; selected waters are assigned to the **nearest solute heavy atom**, which may be different from their nearest solute atom. The two tests are deliberately kept separate. The Python implementation uses periodic `scipy.spatial.cKDTree` queries, whereas the production Fortran uses its own OpenMP linked-cell search.
 
-### Nanodomain \(P_1,P_2,P_{21}\)
+### Nanodomain $P_1,P_2,P_{21}$
 
 Define
 
-\[
+$$
 c_i = \mathbf u_i\cdot\mathbf n_i, \qquad
 P_1(i)=c_i, \qquad P_2(i)=\frac{3c_i^2-1}{2}.
-\]
+$$
 
-For \(P_{21}\), let \(\mathbf w_i\) be the unit normal to the water H–O–H plane, and let \(\chi_i\) be its angle to the normalized vector \(\mathbf n_i\times\mathbf u_i\) when the latter is nonzero. Then the implemented orientation parameter is
+For $P_{21}$, let $\mathbf w_i$ be the unit normal to the water H–O–H plane, and let $\chi_i$ be its angle to the normalized vector $\mathbf n_i\times\mathbf u_i$ when the latter is nonzero. Then the implemented orientation parameter is
 
-\[
+$$
 P_{21}(i)=\frac{1-c_i^2}{2}\left(2\cos^2\chi_i-1\right).
-\]
+$$
 
-A zero-length \(\mathbf n_i\times\mathbf u_i\) is treated by a zero contribution after applying the prefactor \(1-c_i^2\). The normal to the water plane may be taken with either cross-product orientation because \(P_{21}\) uses \(\cos^2\chi_i\).
+A zero-length $\mathbf n_i\times\mathbf u_i$ is treated by a zero contribution after applying the prefactor $1-c_i^2$. The normal to the water plane may be taken with either cross-product orientation because $P_{21}$ uses $\cos^2\chi_i$.
 
-The map is **not** a single mean over all water observations. In each frame, for every solute heavy atom \(a\), the selected waters assigned to it are averaged:
+The map is **not** a single mean over all water observations. In each frame, for every solute heavy atom $a$, the selected waters assigned to it are averaged:
 
-\[
+$$
 \overline{P}_\ell(a,t)=
 \begin{cases}
 N_a(t)^{-1}\sum_{i\to a}P_\ell(i,t),&N_a(t)>0,\\
 0,&N_a(t)=0.
 \end{cases}
-\]
+$$
 
 The per-frame mean is then accumulated using **all frames**, including frames with zero assigned waters:
 
-\[
+$$
 P_\ell(a)=\frac{1}{N_f}\sum_{t=1}^{N_f}\overline{P}_\ell(a,t),
 \qquad \ell\in\{1,2,21\}.
-\]
+$$
 
 The heavy-atom value is copied to each protein hydrogen bonded to that heavy atom, preserving the atom-resolved output convention. The test checks the entire 1,436-solute-atom `DATA DI :` table in the Fortran `p1p2.dat`, including atom identity and the declared number of frames.
 
@@ -268,31 +268,31 @@ The current Kirkwood implementation computes **three ensembles in one trajectory
 2. `PRO16_7A`: water O within 7 Å of the backbone carbonyl oxygen of residue PRO16.
 3. `PRO16_10A`: water O within 10 Å of that same PRO16 carbonyl oxygen.
 
-For every selected water in **all three** ensembles, the local direction \(\mathbf n_i\) is still taken relative to its nearest protein **heavy atom**. The PRO16 carbonyl is a region-selection center, *not* a shared projection axis.
+For every selected water in **all three** ensembles, the local direction $\mathbf n_i$ is still taken relative to its nearest protein **heavy atom**. The PRO16 carbonyl is a region-selection center, *not* a shared projection axis.
 
-For the instantaneous water count \(N(t)\), let \(p_i=\mathbf u_i\cdot\mathbf n_i\) and \(\mathbf u_{\parallel,i}=\mathbf u_i-p_i\mathbf n_i\). Then
+For the instantaneous water count $N(t)$, let $p_i=\mathbf u_i\cdot\mathbf n_i$ and $\mathbf u_{\parallel,i}=\mathbf u_i-p_i\mathbf n_i$. Then
 
-\[
+$$
 \begin{aligned}
 g_K(t) &= \frac{1}{N(t)}\sum_{i,j}\mathbf u_i\cdot\mathbf u_j,\\[3pt]
 g_{\perp}(t) &= \frac{1}{N(t)}\sum_{i,j}p_i p_j,\\[3pt]
 g_{\parallel}(t) &= \frac{1}{N(t)}\sum_{i,j}\mathbf u_{\parallel,i}\cdot\mathbf u_{\parallel,j}.
 \end{aligned}
-\]
+$$
 
-The production code evaluates the equivalent \(O(N)\) collective-vector reductions, but Python's **default validation computes the explicit \(i,j\) Gram matrices**, avoiding the production reduction as a numerical implementation. An optional `--fast-pairs` flag uses the equivalent \(O(N)\) formulas for longer local trajectories.
+The production code evaluates the equivalent $O(N)$ collective-vector reductions, but Python's **default validation computes the explicit $i,j$ Gram matrices**, avoiding the production reduction as a numerical implementation. An optional `--fast-pairs` flag uses the equivalent $O(N)$ formulas for longer local trajectories.
 
 The other tested quantities are
 
-\[
+$$
 \mathrm{normal\_coherence}(t)=\frac{|\sum_i\mathbf n_i|}{N(t)},
 \qquad
 R(t)=g_K(t)-g_\perp(t)-g_\parallel(t).
-\]
+$$
 
-Because the individual normals vary along the protein surface, **\(R(t)\) is not generally zero**. It would be incorrect for the test to impose a common-normal decomposition identity on these curved hydration-shell regions. The residual itself is compared as a numerical observable.
+Because the individual normals vary along the protein surface, **$R(t)$ is not generally zero**. It would be incorrect for the test to impose a common-normal decomposition identity on these curved hydration-shell regions. The residual itself is compared as a numerical observable.
 
-The comparison covers the `frame`, `valid`, `N`, `normal_coherence`, `g_k`, `g_perp`, `g_parallel`, and `decomposition_residual` columns of each region's `.dat` time series. `valid` and `N` are integer-exact comparisons. The reference also reconstructs the **15-field Kirkwood summary**, averaging only frames where \(N(t)>0\), and compares all its integer and floating-point fields to the corresponding `kirkwood_*_summary.dat` output.
+The comparison covers the `frame`, `valid`, `N`, `normal_coherence`, `g_k`, `g_perp`, `g_parallel`, and `decomposition_residual` columns of each region's `.dat` time series. `valid` and `N` are integer-exact comparisons. The reference also reconstructs the **15-field Kirkwood summary**, averaging only frames where $N(t)>0$, and compares all its integer and floating-point fields to the corresponding `kirkwood_*_summary.dat` output.
 
 ## 6. Recorded validation result
 
@@ -300,13 +300,13 @@ The distributed reference CSVs were computed independently from the same 10-fram
 
 | Output | Comparison scope | Largest observed absolute difference |
 |---|---|---:|
-| Nanodomain | \(P_1,P_2,P_{21}\), all 1,436 solute atoms | \(5.0\times10^{-11}\) |
-| Kirkwood interface | Frame-resolved components/residual | \(7.5\times10^{-14}\) |
-| Kirkwood PRO16 7 Å | Frame-resolved components/residual | \(5.3\times10^{-15}\) |
-| Kirkwood PRO16 10 Å | Frame-resolved components/residual | \(4.0\times10^{-15}\) |
+| Nanodomain | $P_1,P_2,P_{21}$, all 1,436 solute atoms | $5.0\times10^{-11}$ |
+| Kirkwood interface | Frame-resolved components/residual | $7.5\times10^{-14}$ |
+| Kirkwood PRO16 7 Å | Frame-resolved components/residual | $5.3\times10^{-15}$ |
+| Kirkwood PRO16 10 Å | Frame-resolved components/residual | $4.0\times10^{-15}$ |
 | Kirkwood summaries | All 15 fields, all three regions | PASS |
 
-The nanodomain file prints ten decimal places; numerical differences at roughly \(10^{-11}\) are consistent with formatting. The regression defaults to \(`atol=rtol=10^{-8}`\), comfortably tighter than typical scientific-analysis tolerances but looser than the formatted-output rounding scale.
+The nanodomain file prints ten decimal places; numerical differences at roughly $10^{-11}$ are consistent with formatting. The regression defaults to `atol=rtol=1e-8`, comfortably tighter than typical scientific-analysis tolerances but looser than the formatted-output rounding scale.
 
 To adjust these deliberately:
 
