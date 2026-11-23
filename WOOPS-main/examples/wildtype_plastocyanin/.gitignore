@@ -1,0 +1,16 @@
+# Explicitly allow only this small, real-system teaching fixture through the
+# repository's broad *.psf, *.pdb and *.dcd production-data ignore patterns.
+!input/wildtype.psf
+!input/wildtype.pdb
+!input/wildtype.dcd
+
+# Rerun outputs and logs are reproducible and should not be committed.
+runs/*/*.dat
+runs/*/*.log
+runs/*/restart
+runs/*/restart.*
+
+# Generated visualization outputs (original beta-tagged input is unchanged).
+derived/
+__pycache__/
+*.pyc

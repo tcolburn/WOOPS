@@ -1,0 +1,34 @@
+# Fortran build products
+*.o
+*.mod
+map.e
+
+# Trajectories and simulation data
+*.dcd
+*.xtc
+*.trr
+*.nc
+*.coor
+*.vel
+*.xsc
+*.restart
+
+# Analysis products
+*.parquet
+*.tga
+*.out
+*.log
+*.swp
+*~
+
+# Large/project-specific molecular systems are intentionally not tracked by default
+*.psf
+*.pdb
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# macOS
+.DS_Store

@@ -1,0 +1,1 @@
+Run WOOPS from this directory: `../../../../src/kirkwood/map.e < WOOPS_input`. The `WOOPS_input` paths are relative to this directory. Results appear here as `kirkwood_*.dat`. Compare to `../../sample_output/kirkwood/`.
