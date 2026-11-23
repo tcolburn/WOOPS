@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare re-run WOOPS outputs to original Fortran output (stdlib only).
+"""Compare WOOPS run outputs with the bundled sample output.
 
 This is a reproduction/compatibility check, not an independent physics
 validation. See the repository's separate validation/ suite for that.

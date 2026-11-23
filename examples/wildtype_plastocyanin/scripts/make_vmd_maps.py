@@ -21,7 +21,10 @@ def main():
     atom_lines=[line for line in pdb_lines if line.startswith(('ATOM  ','HETATM'))]
     count=len(atom_lines)
     if count != 34709 or len(values) != 1436:
-        raise ValueError(f'Unsample_output system sizes: {count} total, {len(values)} solute')
+        raise ValueError(
+            f'Expected 34,709 PDB atoms and 1,436 solute records, '
+            f'found {count:,} PDB atoms and {len(values):,} solute records'
+        )
     out=ROOT/'derived'
     out.mkdir(exist_ok=True)
     for component,label in [(1,'p1'),(2,'p2'),(3,'p21')]:
@@ -35,5 +38,5 @@ def main():
         path=out/f'{label}_map.pdb'
         path.write_text('REMARK BETA COLUMN HOLDS WOOPS '+label.upper()+' VALUES; NOT A VALID WOOPS INPUT\n'+''.join(output))
         print(f'Wrote {path.relative_to(ROOT)}')
-    print('Use the original input/wildtype.pdb for analysis; these PDBs are for visualization only.')
+    print('Use input/wildtype.pdb for analysis and the derived PDBs for visualization.')
 if __name__=='__main__':main()

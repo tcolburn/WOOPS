@@ -55,7 +55,7 @@ for branch in nanodomain kirkwood; do
   fi
 done
 if [ "$COMPARE" -eq 1 ]; then
-  echo '[3/3] Comparing newly generated data to the original WOOPS results ...'
+  echo '[3/3] Comparing run output with the bundled sample output ...'
   python3 "$HERE/scripts/compare_results.py"
 else
   echo '[3/3] Finished (--no-compare). Outputs are in runs/{nanodomain,kirkwood}/.'
